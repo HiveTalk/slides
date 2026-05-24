@@ -43,8 +43,8 @@ export const slides: Slide[] = [
         label: 'hivetalk.org',
         href: 'https://hivetalk.org',
         external: true,
-        // hivetalk.org banner — top-left of slide 1
-        x: 6.7, y: 2.2, w: 32.0, h: 14.2,
+        // hivetalk.org banner — covering logo and text
+        x: 2.0, y: 12.0, w: 32.0, h: 12.0,
       },
     ],
   },
@@ -116,6 +116,14 @@ export const slides: Slide[] = [
     id: 'projects-2',
     title: 'More projects',
     // 4th slide content — populate hotspots once you confirm what links live here.
-    hotspots: [],
+    hotspots: [
+      {
+        label: 'Nostr Profile',
+        href: 'https://primal.net/p/nprofile1qqsp8luyzs4x2f3y2yjvrq8m2dpvagfs64v0a3753qqe68dw02k2rzscqypm5',
+        external: true,
+        // Positioned all the way to the right
+        x: 50.0, y: 44.0, w: 50.0, h: 12.0,
+      },
+    ],
   },
 ];
