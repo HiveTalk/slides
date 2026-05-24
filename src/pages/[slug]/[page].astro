@@ -1,0 +1,28 @@
+---
+import Base from '../../layouts/Base.astro';
+import TalkViewer from '../../components/TalkViewer.astro';
+import { talks, getTalk } from '../../data/talks';
+
+export async function getStaticPaths() {
+  const paths: { params: { slug: string; page: string } }[] = [];
+  for (const t of talks) {
+    for (let i = 1; i <= t.pageCount; i++) {
+      paths.push({ params: { slug: t.slug, page: String(i) } });
+    }
+  }
+  return paths;
+}
+
+const { slug, page } = Astro.params;
+const talk = getTalk(slug!);
+if (!talk) {
+  return Astro.redirect('/');
+}
+const pageNum = Number(page);
+if (!Number.isInteger(pageNum) || pageNum < 1 || pageNum > talk.pageCount) {
+  return Astro.redirect(`/${talk.slug}`);
+}
+---
+<Base title={`${talk.title} — ${pageNum}/${talk.pageCount}`}>
+  <TalkViewer talk={talk} page={pageNum} />
+</Base>

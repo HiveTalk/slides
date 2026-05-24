@@ -1,0 +1,249 @@
+/* ===== Reset / base ===== */
+:root {
+  --bg: #050606;
+  --pink: #ff4ff3;
+  --slide-aspect: calc(1024.5 / 576); /* each Canva slide is 16:9 */
+  --slide-count: 4;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: #fff;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ===== Deck container ===== */
+.deck {
+  scroll-snap-type: y mandatory;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* ===== Slide ===== */
+.slide {
+  scroll-snap-align: start;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  position: relative;
+}
+
+/* The frame is the actual rendered slide — fixed aspect ratio so the
+   background SVG maps cleanly and hotspots (in %) line up exactly. */
+.slide-frame {
+  position: relative;
+  width: min(100%, calc((100vh - 32px) * var(--slide-aspect)));
+  aspect-ratio: 1024.5 / 576;
+  background-image: url('/Home.svg');
+  background-repeat: no-repeat;
+  /* SVG holds 3 stacked slides → make it 3× tall, then slide each child via
+     background-position-y (set inline per-slide). */
+  background-size: 100% calc(var(--slide-count) * 100%);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+}
+
+/* ===== Hotspots ===== */
+.hotspot {
+  position: absolute;
+  display: block;
+  border-radius: 8px;
+  outline: 0;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s, transform 0.15s;
+  z-index: 2;
+}
+.hotspot:hover,
+.hotspot:focus-visible {
+  background: rgba(255, 79, 243, 0.18);
+  box-shadow: 0 0 0 2px rgba(255, 79, 243, 0.6),
+              0 0 24px rgba(255, 79, 243, 0.45);
+}
+
+/* Toggle in DevTools (or add ?debug to URL via JS) to see hotspot boxes */
+.deck.debug .hotspot {
+  background: rgba(255, 79, 243, 0.2);
+  outline: 2px dashed #ff4ff3;
+}
+
+/* ===== Side nav dots ===== */
+.slide-nav {
+  position: fixed;
+  right: clamp(10px, 1.5vw, 20px);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 50;
+}
+.slide-nav a {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+.slide-nav a:hover,
+.slide-nav a.active {
+  background: var(--pink);
+  border-color: var(--pink);
+  transform: scale(1.2);
+}
+
+/* ===== Mobile layout ===== */
+@media (max-width: 640px) {
+  .slide-nav { display: none; }
+
+  /* Stop forcing each slide to fill the full viewport height — that
+     produced large empty bands above and below the 16:9 frame on
+     portrait phones. Instead, give the slide a sensible top/bottom
+     pad and let it size to its content. Snap-scrolling still works. */
+  .slide {
+    min-height: auto;
+    padding: 14px 12px;
+  }
+  .slide-frame {
+    width: 100%;
+    /* aspect-ratio still applies, so height auto-derives */
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  }
+  .deck { scroll-snap-type: y proximity; }
+}
+
+/* ===== Talk viewer (per-talk slide deck pages) ===== */
+.talk-viewer {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+
+.talk-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  gap: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.4);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(8px);
+}
+.talk-home {
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  opacity: 0.85;
+  transition: opacity 0.15s, color 0.15s;
+}
+.talk-home:hover { opacity: 1; color: var(--pink); }
+.talk-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  font-size: 14px;
+}
+.talk-meta strong {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.talk-counter {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.65;
+  font-size: 13px;
+}
+
+.talk-stage {
+  flex: 1;
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 16px clamp(48px, 7vw, 80px);
+  min-height: 0;
+}
+
+.talk-slide {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100vh - 110px);
+  max-height: calc(100svh - 110px);
+  width: auto;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.talk-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  transition: background 0.15s, color 0.15s, transform 0.15s;
+  z-index: 5;
+}
+.talk-nav:hover {
+  background: var(--pink);
+  color: #0a0a0a;
+}
+.talk-prev { left: 12px; }
+.talk-next { right: 12px; }
+.talk-nav.disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.talk-footer {
+  padding: 0 16px 12px;
+}
+.talk-progress {
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.talk-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--pink), #832eff);
+  transition: width 0.25s ease;
+}
+
+@media (max-width: 640px) {
+  .talk-bar { padding: 8px 12px; font-size: 13px; }
+  .talk-meta { gap: 8px; }
+  .talk-meta strong { font-size: 13px; }
+  .talk-stage { padding: 8px; }
+  .talk-nav {
+    width: 36px;
+    height: 36px;
+    background: rgba(0, 0, 0, 0.55);
+  }
+  .talk-prev { left: 4px; }
+  .talk-next { right: 4px; }
+  .talk-slide {
+    max-height: calc(100svh - 90px);
+  }
+}

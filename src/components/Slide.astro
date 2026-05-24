@@ -1,0 +1,30 @@
+---
+import type { Slide } from '../data/slides';
+import { SLIDE_COUNT } from '../data/slides';
+import Hotspot from './Hotspot.astro';
+
+interface Props {
+  slide: Slide;
+  /** 0-based index of this slide */
+  index: number;
+}
+
+const { slide, index } = Astro.props;
+
+// Position the shared SVG so this slide's portion is visible.
+// background-size: 100% (SLIDE_COUNT * 100%) makes the SVG that many slides tall,
+// then background-position-y picks the correct slice.
+const count: number = SLIDE_COUNT;
+const posY = count <= 1 ? 0 : (index / (count - 1)) * 100;
+const bgStyle = `background-position: 0% ${posY}%;`;
+---
+<section
+  id={slide.id}
+  class="slide"
+  aria-label={slide.title}
+  data-index={index}
+>
+  <div class="slide-frame" style={bgStyle}>
+    {slide.hotspots.map((h) => <Hotspot hotspot={h} />)}
+  </div>
+</section>

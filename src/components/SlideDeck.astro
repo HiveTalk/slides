@@ -1,0 +1,39 @@
+---
+import { slides } from '../data/slides';
+import Slide from './Slide.astro';
+---
+<nav class="slide-nav" aria-label="Slide navigation">
+  {slides.map((s) => (
+    <a href={`#${s.id}`} aria-label={s.title}></a>
+  ))}
+</nav>
+
+<main class="deck">
+  {slides.map((s, i) => <Slide slide={s} index={i} />)}
+</main>
+
+<script is:inline>
+  // Toggle hotspot outlines with ?debug or by pressing "d"
+  const deck = document.querySelector('.deck');
+  if (location.search.includes('debug')) deck.classList.add('debug');
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'd' && !e.metaKey && !e.ctrlKey) deck.classList.toggle('debug');
+  });
+
+  const dots = document.querySelectorAll('.slide-nav a');
+  const sections = document.querySelectorAll('.slide');
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          const id = e.target.id;
+          dots.forEach((d) =>
+            d.classList.toggle('active', d.getAttribute('href') === '#' + id)
+          );
+        }
+      });
+    },
+    { threshold: 0.5 }
+  );
+  sections.forEach((s) => io.observe(s));
+</script>

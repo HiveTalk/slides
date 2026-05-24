@@ -1,0 +1,19 @@
+---
+import type { Hotspot } from '../data/slides';
+
+interface Props {
+  hotspot: Hotspot;
+}
+
+const { hotspot } = Astro.props;
+const style = `left:${hotspot.x}%;top:${hotspot.y}%;width:${hotspot.w}%;height:${hotspot.h}%;`;
+---
+<a
+  class="hotspot"
+  href={hotspot.href}
+  aria-label={hotspot.label}
+  title={hotspot.label}
+  target={hotspot.external ? '_blank' : undefined}
+  rel={hotspot.external ? 'noopener noreferrer' : undefined}
+  style={style}
+></a>

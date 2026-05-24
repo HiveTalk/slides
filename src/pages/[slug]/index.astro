@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+import TalkViewer from '../../components/TalkViewer.astro';
+import { talks, getTalk } from '../../data/talks';
+
+export async function getStaticPaths() {
+  return talks.map((t) => ({ params: { slug: t.slug } }));
+}
+
+const { slug } = Astro.params;
+const talk = getTalk(slug!);
+if (!talk) {
+  return Astro.redirect('/');
+}
+---
+<Base title={`${talk.title} — Slides`}>
+  <TalkViewer talk={talk} page={1} />
+</Base>
