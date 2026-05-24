@@ -14,6 +14,13 @@ export type Talk = {
 
 export const talks: Talk[] = [
   {
+    slug: 'ffprague26',
+    title: 'FreedomFest Prague',
+    subtitle: 'June 5-7, 2026 — Prague, Czech Republic',
+    folder: 'Jun2026FFPrague',
+    pageCount: 13,
+  },
+  {
     slug: 'bitfest25',
     title: 'Bitfest UK',
     subtitle: 'November 21, 2025 — Manchester, UK',

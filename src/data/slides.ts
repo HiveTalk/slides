@@ -57,22 +57,28 @@ export const slides: Slide[] = [
     //   Title baselines at SVG y ≈ 755.4, 873.0, 986.4 (top→bottom).
     hotspots: [
       {
+        label: 'FreedomFest Prague — Jun 5-7 2026, Prague',
+        href: '/ffprague26',
+        // Top title — "FREEDOMFEST PRAGUE"
+        x: 55.0, y: 23.5, w: 22.0, h: 8.5,
+      },
+      {
         label: 'Purple pill for groups — Jan 22 2026, SF',
         href: '/purple',
-        // Top title — widest text ("PURPLE PILL FOR GROUPS")
-        x: 55.0, y: 23.5, w: 28.0, h: 8.5,
+        // Second title — widest text ("PURPLE PILL FOR GROUPS")
+        x: 55.0, y: 44.0, w: 28.0, h: 8.5,
       },
       {
         label: 'Bitfest UK — Nov 21 2025, Manchester',
         href: '/bitfest25',
-        // Middle title — shortest ("BITFEST UK")
-        x: 55.0, y: 44.0, w: 12.0, h: 8.5,
+        // Third title — shortest ("BITFEST UK")
+        x: 55.0, y: 63.5, w: 12.0, h: 8.5,
       },
       {
         label: 'Presidio Bitcoin — Oct 9 2025, SF',
         href: '/oct25',
         // Bottom title ("PRESIDIO BITCOIN")
-        x: 55.0, y: 63.5, w: 19.0, h: 8.5,
+        x: 55.0, y: 82.5, w: 19.0, h: 8.5,
       },
     ],
   },
